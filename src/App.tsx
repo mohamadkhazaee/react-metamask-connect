@@ -1,10 +1,7 @@
 import { useMemo, useState } from "react";
 import Cookies from "js-cookie";
+import { METAMASK_INFO_KEYS } from "./consts";
 
-export const METAMASK_INFO_KEYS = {
-  ADDRESS: "METAMASK_ACCOUNT_ADDRESS",
-  SIGNITURE: "METAMASK_ACCOUNT_SIGNITURE",
-};
 declare global {
   interface Window {
     ethereum: any;
@@ -13,17 +10,18 @@ declare global {
 
 function App() {
   const [loading, setLoading] = useState(false);
+  const { ADDRESS, SIGNITURE } = METAMASK_INFO_KEYS;
   const metamaskAddress = useMemo(() => {
     if (!loading) {
-      return Cookies.get(METAMASK_INFO_KEYS.ADDRESS);
+      return Cookies.get(ADDRESS);
     }
-  }, [loading]);
+  }, [loading, ADDRESS]);
 
   const handleClick = async () => {
     setLoading(true);
     if (metamaskAddress) {
-      Cookies.remove(METAMASK_INFO_KEYS.ADDRESS);
-      Cookies.remove(METAMASK_INFO_KEYS.SIGNITURE);
+      Cookies.remove(ADDRESS);
+      Cookies.remove(SIGNITURE);
       alert("logged out!");
       return;
     }
@@ -38,8 +36,8 @@ function App() {
         method: "personal_sign",
         params: [message, accounts[0]],
       });
-      Cookies.set(METAMASK_INFO_KEYS.SIGNITURE, accounts[0]);
-      Cookies.set(METAMASK_INFO_KEYS.ADDRESS, signature);
+      Cookies.set(SIGNITURE, accounts[0]);
+      Cookies.set(ADDRESS, signature);
       setLoading(false);
     } else {
       alert("No Metamask Wallet Detected!");

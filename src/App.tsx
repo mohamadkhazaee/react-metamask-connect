@@ -2,12 +2,6 @@ import { useMemo, useState } from "react";
 import Cookies from "js-cookie";
 import { METAMASK_INFO_KEYS } from "./consts";
 
-declare global {
-  interface Window {
-    ethereum: any;
-  }
-}
-
 function App() {
   const [loading, setLoading] = useState(false);
   const { ADDRESS, SIGNITURE } = METAMASK_INFO_KEYS;
